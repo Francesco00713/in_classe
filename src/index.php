@@ -24,6 +24,32 @@
     }
     echo "</pre>";
     $conn -> close();
+
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        $servername = "db";
+        $username = "myuser";
+        $password = "mypassword";
+        $database = "myapp_db";
+
+        $conn = new mysqli($servername, $username, $password, $database);
+
+        if($conn -> connect_error){
+            die("Connessione fallita: " . $conn -> connect_error);
+        }
+
+        $nome = $_POST["nome"];
+        $email = $_POST["email"];
+        $q = "INSERT INTO utenti (nome, email) VALUES ('$nome', '$email')";
+        
+        if($conn -> query($q)){
+            echo "Query eseguita con successo!";
+            $conn -> close();
+        } else{
+            echo "ERRORE!";
+        }
+
+
+    }
 ?>
 
 <!DOCTYPE html>
@@ -34,5 +60,26 @@
     <title>in_classe</title>
 </head>
 <body>
+    <form action="index.php" method="post">
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="text" name="email" required>
+        <br>
+        <input type="submit">
+
+        <?php
+            $conn = new mysqli($servername, $username, $password, $database);
+            if ($conn->connect_error) {
+                die("Connessione fallita: " . $conn->connect_error);
+            }
+
+            $q ="SELECT * form utenti;" ;
+                
+            $result = $conn->query($q);
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+        ?>
+    </form>
 </body>
 </html>
