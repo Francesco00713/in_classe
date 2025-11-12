@@ -23,7 +23,7 @@
         print_r($row);
     }
     echo "</pre>";
-    $conn -> close();
+    //$conn -> close();
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $servername = "db";
@@ -33,8 +33,8 @@
 
         $conn = new mysqli($servername, $username, $password, $database);
 
-        if($conn -> connect_error){
-            die("Connessione fallita: " . $conn -> connect_error);
+        if($conn->connect_error){
+            die("Connessione fallita: " . $conn->connect_error);
         }
 
         $nome = $_POST["nome"];
@@ -47,8 +47,12 @@
         } else{
             echo "ERRORE!";
         }
+    }
 
-
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete_id"])) {
+        $id = $_POST["delete_id"];
+        $q = "DELETE FROM utenti WHERE id = '$id'";
+        $conn->query($q);
     }
 ?>
 
@@ -75,11 +79,41 @@
                 die("Connessione fallita: " . $conn->connect_error);
             }
 
-            $q ="SELECT * form utenti;" ;
+            $q ="SELECT * FROM utenti;" ;
                 
             $result = $conn->query($q);
+            /*
             $row = $result->fetch_array(MYSQLI_ASSOC);
+            */
         ?>
     </form>
+    <table>
+        <?php
+            while($row = $results->fetch_array()){
+                echo "<tr>";
+                echo "<td>" . $row["name"] . "</td>";
+                echo "<td>" . $row["email"] . "</td>";
+            }
+            $conn->close();
+        ?>
+        <tr>
+            <td>
+                Id
+            </td>
+            <td>
+                Nome
+            </td>
+            <td>
+                Email
+            </td>
+            <td>
+                Azioni
+                <form method="POST" action="">
+                    <input type="hidden" value="">
+                    <input type="submit" value="ELIMINA">
+                </form>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
