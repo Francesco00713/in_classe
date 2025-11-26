@@ -1,13 +1,5 @@
 <?php
-    $servername = "db";
-    $username = "myuser";
-    $password = "mypassword";
-    $database = "myapp_db";
-
-    echo $servername . "<br> /";
-    echo $username . "<br> /";
-    echo $password . "<br> /";
-    echo $database . "<br> /";
+    include_once("db_common.php");
 
     $conn = new mysqli($servername, $username, $password, $database);
 
@@ -64,56 +56,38 @@
     <title>in_classe</title>
 </head>
 <body>
-    <form action="index.php" method="post">
-        <label for="nome">Nome:</label>
-        <input type="text" name="nome" required>
-        <br>
-        <label for="email">Email:</label>
-        <input type="text" name="email" required>
-        <br>
-        <input type="submit">
-
-        <?php
-            $conn = new mysqli($servername, $username, $password, $database);
-            if ($conn->connect_error) {
-                die("Connessione fallita: " . $conn->connect_error);
-            }
-
-            $q ="SELECT * FROM utenti;" ;
-                
-            $result = $conn->query($q);
-            /*
-            $row = $result->fetch_array(MYSQLI_ASSOC);
-            */
-        ?>
-    </form>
+    <?php
+        $conn = new mysqli($servername, $username, $password, $database);
+        if ($conn->connect_error) {
+            die("Connessione fallita: " . $conn->connect_error);
+        }
+        $q ="SELECT * FROM utenti;" ;
+        $result = $conn->query($q);
+    ?>
     <table>
         <?php
-            while($row = $results->fetch_array()){
-                echo "<tr>";
-                echo "<td>" . $row["name"] . "</td>";
-                echo "<td>" . $row["email"] . "</td>";
-            }
-            $conn->close();
+            while($row = $result->fetch_array()){
         ?>
         <tr>
             <td>
-                Id
+                <?php echo $row["id"] ?>
             </td>
             <td>
-                Nome
+                <?php echo $row["nome"] ?>
             </td>
             <td>
-                Email
+                <?php echo $row["email"] ?>
             </td>
             <td>
-                Azioni
-                <form method="POST" action="">
-                    <input type="hidden" value="">
-                    <input type="submit" value="ELIMINA">
+                <form method="post" action=".">
+                <input type="hidden" name="user_id" value="<?php echo $row["id"]?>"/>
+                <input type="submit" value="cancella"/>
                 </form>
             </td>
         </tr>
+        <?php
+            }
+        ?>
     </table>
 </body>
 </html>
