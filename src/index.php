@@ -13,14 +13,16 @@
         $id = $_POST["delete_id"];
         $q = "DELETE FROM utenti WHERE id = '$id'";
         $conn -> query($q);
-    } else if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["edit"])) {
+    }
+    else if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["edit"])) {
         //- - - MODIFICA - - - //
         $edit_id = $_POST["edit_id"];
         $edit_nome = $_POST["edit_nome"];
         $edit_email = $_POST["edit_email"];
         $q = "UPDATE utenti SET nome='$edit_nome', email='$edit_email' WHERE id='$edit_id'";
         $conn -> query($q);
-    }else if($_SERVER["REQUEST_METHOD"] == "POST"){
+    }
+    else if($_SERVER["REQUEST_METHOD"] == "POST"){
         //- - - STAMPA TABELLA - - -//
         $nome = $_POST["nome"];
         $email = $_POST["email"];
@@ -49,12 +51,6 @@
             padding-top: 17.5px;
         }
     </style>
-    <script>
-        function showEdit(id) {
-            const row = document.getElementById("edit-" + id);
-            row.classList.toggle("hidden");
-        }
-    </script>
 </head>
 
 <body>
@@ -70,7 +66,7 @@
         <?php
             while($row = $result -> fetch_array()){
         ?>
-        <tr>
+        <tr id="row-<?php echo $row['id']; ?>">
             <td>
                 <?php echo $row["id"] ?>
             </td>
@@ -81,7 +77,7 @@
                 <?php echo $row["email"] ?>
             </td>
             <td>
-                <button type="button" onclick="showEdit(<?php echo $row['id']; ?>)">Modifica</button>
+                <button type="button" class="edit" data-target="<?php echo $row['id']; ?>">Modifica</button>
             </td>
             <td class="button">
                 <form method="post" action=".">
@@ -111,7 +107,14 @@
             }
         ?>
     </table>
+    <script>
+        let buttons = document.querySelectorAll(".edit");
+        buttons.forEach(function(element, index, array) {
+            element.addEventListener("click", function () {
+                let id = element.dataset.target;
+                document.getElementById("edit-" + id).classList.remove("hidden");
+            });
+        });
+    </script>
 </body>
 </html>
-
-let button = document.querySelectorAll("")
