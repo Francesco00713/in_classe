@@ -1,6 +1,20 @@
 <?php
-    if($_POST["username"]){
+    $conn = new mysqli("db", "users_app", "users_pass", "Users");
+    if ($conn->connect_error) {
+        die("Errore di connessione");
+    }
+    if (isset($_POST["username"]) && isset($_POST["password"])) {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
 
+        $sql = "SELECT * FROM utenti WHERE username = '$username' AND passwordd = '$password'";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            echo "Utente già presente nel database";
+        } else {
+            echo "Utente NON presente nel database";
+        }
     }
 
     //$scadenza = time()+60*60*24*7;
@@ -18,12 +32,12 @@
 </head>
 <body>
     <form method="POST">
-        <h1>INSERISCI LE TUE PREFERENZE</h1>
+        <h1>INSERISCI LE TUE CREDENZIALI</h1>
         <label for="username">Inserisci il tuo username: </label>
         <input type="text" name="username" required>
         <br>
-        <label for="theme">Inserisci la tua password:</label>
-        <input type="text" name="username" required>
+        <label for="password">Inserisci la tua password:</label>
+        <input type="text" name="password" required>
         <br><br>
         <button type="submit">INVIA</button>
     </form>
