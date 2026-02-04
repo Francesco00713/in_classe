@@ -1,23 +1,22 @@
 <?php
-session_start();
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-
-    if ($username === "Francesco" && $password === "123") {
-        session_regenerate_id(true);
-        $_SESSION["logged"] = true;
-        $_SESSION["username"] = $username;
-        $_SESSION["session_id"] = session_id();
-        $_SESSION["login_time"] = date("Y-m-d H:i:s");
-        
-        header("Location: area_riservata.php");
-        exit();
-    } else {
-        echo "Username o password errati";
+        if ($username === "Francesco" && $password === "123") {
+            session_start();
+            session_regenerate_id(true);
+            $_SESSION["logged"] = true;
+            $_SESSION["username"] = $username;
+            $_SESSION["session_id"] = session_id();
+            $_SESSION["login_time"] = date("Y-m-d H:i:s");
+            
+            header("Location: area_riservata.php");
+            exit();
+        } else {
+            echo "Username o password errati";
+        }
     }
-}
 ?>
 
 <!DOCTYPE html>
